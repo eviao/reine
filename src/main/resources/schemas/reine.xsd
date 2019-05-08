@@ -1,0 +1,46 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://schema.eviao.cn/reine"
+           xmlns="http://schema.eviao.cn/reine"
+           elementFormDefault="qualified">
+
+    <xs:simpleType name="QueryMode">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="single"/>
+            <xs:enumeration value="multiple"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="Query" mixed="true">
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="mode" type="QueryMode" />
+    </xs:complexType>
+
+    <xs:complexType name="Dataset" mixed="true">
+        <xs:sequence>
+            <xs:element name="query" type="Query" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="url" type="xs:string" />
+        <xs:attribute name="driver" type="xs:string" />
+        <xs:attribute name="username" type="xs:string" />
+        <xs:attribute name="password" type="xs:string" />
+    </xs:complexType>
+
+    <xs:complexType name="Datasource">
+        <xs:sequence>
+            <xs:element name="dataset" type="Dataset" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Layout" mixed="true" />
+
+    <xs:element name="reine">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="datasource" type="Datasource" minOccurs="1" maxOccurs="1" />
+                <xs:element name="layout" type="Layout" minOccurs="1" maxOccurs="1" />
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" />
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

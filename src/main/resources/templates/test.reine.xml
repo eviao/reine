@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<reine xmlns="http://schema.eviao.cn/reine">
+    <datasource>
+        <dataset name="template" url="jdbc:mysql://localhost/template" driver="com.mysql.cj.jdbc.Driver" username="root" password="root">
+            <query name="test">SELECT * FROM test</query>
+            <query name="test1" mode="single">SELECT * FROM test WHERE name = '{{name}}'</query>
+        </dataset>
+    </datasource>
+    <layout>
+        <![CDATA[
+            {{json this}}
+            <script type="text/javascript">
+                var data = {{json this}};
+                console.log(data);
+            </script>
+        ]]>
+    </layout>
+</reine>
