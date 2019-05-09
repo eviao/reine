@@ -7,6 +7,8 @@ public class MultipleData implements Data {
 
     private final List<Map<String, Object>> data;
 
+    public final static MultipleData EMPTY = new MultipleData(null);
+
     public MultipleData(List<Map<String, Object>> data) {
         this.data = data;
     }

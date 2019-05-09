@@ -6,6 +6,8 @@ import cn.eviao.reine.compiler.TemplateCompilerFactory;
 import cn.eviao.reine.constant.Address;
 import cn.eviao.reine.resolver.DefinitionResolver;
 import cn.eviao.reine.resolver.XMLDefinitionResolver;
+import cn.eviao.reine.utils.BootstrapUtils;
+import cn.eviao.reine.utils.FileLoaderUtils;
 import com.alibaba.fastjson.JSON;
 import io.reactivex.Single;
 import io.reactivex.internal.functions.Functions;
@@ -18,9 +20,7 @@ import io.vertx.reactivex.ext.web.RoutingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.nio.file.Paths;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class RequestVerticle extends AbstractVerticle {
@@ -28,8 +28,6 @@ public class RequestVerticle extends AbstractVerticle {
     private final Logger logger = LogManager.getLogger(RequestVerticle.class);
 
     private final static String CONTENT_HTML_TYPE = "text/html; charset=utf-8";
-    private final static String FILE_SUFFIX = ".reine.xml";
-    private final static String ROOT_FOLDER = "templates";
 
     private final TemplateCompiler compiler = TemplateCompilerFactory.factory();
     private final DefinitionResolver resolver = new XMLDefinitionResolver();
@@ -56,20 +54,18 @@ public class RequestVerticle extends AbstractVerticle {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
-    private Single<Reine> loadDefinition(String template) {
-        String filePath = Optional.of(template)
-                .map(it -> it + FILE_SUFFIX)
-                .map(it -> Paths.get(ROOT_FOLDER, it).toString())
-                .orElse(null);
-        return vertx.fileSystem().rxReadFile(filePath)
-                .map(content -> content.toString())
-                .flatMap(resolver::apply);
+    private Single<Reine> resolveDefinition(String name) {
+        return FileLoaderUtils.loadTemplate(vertx, name).flatMap(resolver::apply);
     }
 
-    private Single<Map> loadContext(Reine reine, Map<String, String> params) {
+    private Single<Map> loadDataSource(Reine reine, Map<String, String> params) {
         JsonObject message = new JsonObject().put("reine", reine.toJson()).put("params", params);
         return vertx.eventBus().<String>rxSend(Address.DATASOURCE_QUERY, message)
                 .map(it -> it.body()).map(it -> JSON.parseObject(it, Map.class));
+    }
+
+    private Single<String> combineLayout(String layout) {
+        return FileLoaderUtils.loadBootstrap(vertx).map(it -> BootstrapUtils.combineLayout(it, layout));
     }
 
     private void handlePreview(RoutingContext routingContext) {
@@ -78,10 +74,10 @@ public class RequestVerticle extends AbstractVerticle {
 
         Map<String, String> params = transformParams(routingContext);
 
-        loadDefinition(params.get("template"))
+        resolveDefinition(params.get("template"))
                 .flatMap(reine -> {
-                    Single<String> layout = Single.just(reine.getLayout());
-                    Single<Map> context = loadContext(reine, params);
+                    Single<String> layout = combineLayout(reine.getLayout());
+                    Single<Map> context = loadDataSource(reine, params);
                     return Single.zip(layout, context, compiler::apply);
                 })
                 .flatMap(Functions.identity())

@@ -50,6 +50,8 @@ public class QueryExecutor implements DaoExecutor<Map<String, Map<String, Object
     private Single<Data> transformSingle(ResultSet resultSet) {
         if (resultSet.getNumRows() > 1) {
             logger.warn("query returns more than 1 row.");
+        } else if (resultSet.getNumRows() == 0) {
+            return Single.just(SingleData.EMPTY);
         }
         return Single.just(new SingleData(getResultRowByIndex(resultSet, 0)));
     }
