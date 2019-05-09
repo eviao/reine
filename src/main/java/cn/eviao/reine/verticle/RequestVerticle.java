@@ -7,7 +7,7 @@ import cn.eviao.reine.constant.Address;
 import cn.eviao.reine.resolver.DefinitionResolver;
 import cn.eviao.reine.resolver.XMLDefinitionResolver;
 import cn.eviao.reine.utils.BootstrapUtils;
-import cn.eviao.reine.utils.FileLoaderUtils;
+import cn.eviao.reine.utils.TemplateUtils;
 import com.alibaba.fastjson.JSON;
 import io.reactivex.Single;
 import io.reactivex.internal.functions.Functions;
@@ -55,7 +55,7 @@ public class RequestVerticle extends AbstractVerticle {
     }
 
     private Single<Reine> resolveDefinition(String name) {
-        return FileLoaderUtils.loadTemplate(vertx, name).flatMap(resolver::apply);
+        return TemplateUtils.loadTemplate(vertx, name).flatMap(resolver::apply);
     }
 
     private Single<Map> loadDataSource(Reine reine, Map<String, String> params) {
@@ -65,7 +65,7 @@ public class RequestVerticle extends AbstractVerticle {
     }
 
     private Single<String> combineLayout(String layout) {
-        return FileLoaderUtils.loadBootstrap(vertx).map(it -> BootstrapUtils.combineLayout(it, layout));
+        return BootstrapUtils.loadBootstrap(vertx).map(it -> BootstrapUtils.combineLayout(it, layout));
     }
 
     private void handlePreview(RoutingContext routingContext) {

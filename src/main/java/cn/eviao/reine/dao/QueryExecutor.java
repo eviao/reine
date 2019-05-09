@@ -60,8 +60,7 @@ public class QueryExecutor implements DaoExecutor<Map<String, Map<String, Object
         Query query = (Query) command;
 
         Function<ResultSet, Single<Data>> transform = query.getModeAs() == QueryMode.single
-                ? this::transformSingle
-                : this::transformMultiple;
+                ? this::transformSingle : this::transformMultiple;
 
         Single<String> name = Single.just(query.getName());
         Single<Data> resultset = compiler.apply(query.getCommand(), params)
