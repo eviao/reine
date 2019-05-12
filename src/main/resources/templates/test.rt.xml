@@ -8,11 +8,14 @@
     </datasource>
     <layout>
         <![CDATA[
-            {{json this}}
-            <script type="text/javascript">
-                var data = {{json this}};
-                console.log(data);
-            </script>
+            <div>
+                {% for t in template.test %}
+                    <div>
+                        <hello-world value={{t}} />
+                        {{t}}
+                    </div>
+                {% endfor %}
+            </div>
         ]]>
     </layout>
 </reine>

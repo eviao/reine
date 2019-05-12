@@ -18,7 +18,8 @@
         <guava.version>27.1-jre</guava.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <fastjson.version>1.2.58</fastjson.version>
-
+        <pebble.version>3.0.9</pebble.version>
+        
         <main.verticle>cn.eviao.reine.MainVerticle</main.verticle>
     </properties>
 
@@ -64,6 +65,12 @@
             <version>${handlebars.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.pebbletemplates</groupId>
+            <artifactId>pebble</artifactId>
+            <version>${pebble.version}</version>
+        </dependency>
+        
         <!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
         <dependency>
             <groupId>com.alibaba</groupId>

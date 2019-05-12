@@ -7,11 +7,6 @@
     <title>Document</title>
 </head>
 <body>
-    <div id="__reine_root">
-        {{> layout}}
-    </div>
-    <script type="text/javascript">
-        window.__reine_data = ({{json this}});
-    </script>
+    <div id="_reine_root">#{> layout}</div>
 </body>
 </html>

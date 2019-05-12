@@ -9,16 +9,15 @@ public class HandlebarsCompiler implements TemplateCompiler {
 
     public final static HandlebarsCompiler INSTANCE = new HandlebarsCompiler();
 
-    private Handlebars handlebars = new Handlebars();
+    private final Handlebars handlebars = new Handlebars();
 
     public HandlebarsCompiler() {
-        this.handlebars = new Handlebars();
         handlebars.registerHelper("json", Jackson2Helper.INSTANCE);
     }
 
     @Override
-    public Single<String> apply(String source, Object model) {
-        Context context = Context.newBuilder(model).build();
+    public Single<String> apply(String source, Object data) {
+        Context context = Context.newBuilder(data).build();
         try {
             return Single.just(handlebars.compileInline(source).apply(context));
         } catch (Exception e) {

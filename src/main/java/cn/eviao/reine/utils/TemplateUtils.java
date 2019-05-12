@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class TemplateUtils {
     public final static String TEMPLATE_ROOT = "templates";
-    public final static String TEMPLATE_SUFFIX = ".reine.xml";
+    public final static String TEMPLATE_SUFFIX = ".rt.xml";
 
     public static Single<String> loadTemplate(Vertx vertx, String name) {
         String filePath = Optional.of(name).map(it -> it + TEMPLATE_SUFFIX)

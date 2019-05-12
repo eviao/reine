@@ -1,24 +1,29 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+
+const resolve = (...paths) => path.resolve(__dirname, ...paths);
 
 module.exports = {
-  mode: 'production', // development or production
+  mode: 'development', // development or production
   entry: './src/main.js',
   output: {
     filename: 'bootstrap.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: resolve('dist'),
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      'vue$': resolve('node_modules', 'vue/dist/vue.esm.js'),
+      '@': resolve('src'),
     },
   },
   plugins: [
+    new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
       inlineSource: '.(js|css)$',
-      template: 'src/bootstrap.hbs',
-      filename: 'bootstrap.hbs',
+      template: 'src/template.tpl',
+      filename: 'bootstrap.tpl',
       xhtml: true,
       inject: 'body',
     }),
@@ -27,27 +32,22 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+      },
+      {
         test: /\.m?js$/,
         exclude: /(node_modules)/,
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          }
         }
       },
       {
-        test: /\.less$/,
+        test: /\.css$/,
         use: [
-          {
-            loader: 'style-loader',
-          },
-          {
-            loader: 'css-loader',
-          },
-          {
-            loader: 'less-loader',
-          },
+          'vue-style-loader',
+          'style-loader',
+          'css-loader',
         ],
       },
     ]

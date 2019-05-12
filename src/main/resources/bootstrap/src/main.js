@@ -1,6 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import Vue from 'vue';
+import HelloWorld from '@/components/HelloWorld.vue';
 
-import HelloWorld from '@/components/HelloWorld';
+Vue.component('hello-world', HelloWorld);
 
-ReactDOM.render(<HelloWorld />, document.getElementById('__reine_root'));
+new Vue({
+    el: '#_reine_root',
+    data: {
+        message: 'Hello Vue!'
+    }
+});

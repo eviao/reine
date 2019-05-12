@@ -64,8 +64,8 @@ public class RequestVerticle extends AbstractVerticle {
                 .map(it -> it.body()).map(it -> JSON.parseObject(it, Map.class));
     }
 
-    private Single<String> combineLayout(String layout) {
-        return BootstrapUtils.loadBootstrap(vertx).map(it -> BootstrapUtils.combineLayout(it, layout));
+    private Single<String> combineBootstrap(String layout) {
+        return BootstrapUtils.combineLayout(vertx, layout);
     }
 
     private void handlePreview(RoutingContext routingContext) {
@@ -76,10 +76,12 @@ public class RequestVerticle extends AbstractVerticle {
 
         resolveDefinition(params.get("template"))
                 .flatMap(reine -> {
-                    Single<String> layout = combineLayout(reine.getLayout());
+                    Single<String> layout = Single.just(reine.getLayout());
                     Single<Map> context = loadDataSource(reine, params);
                     return Single.zip(layout, context, compiler::apply);
                 })
+                .flatMap(Functions.identity())
+                .map(this::combineBootstrap)
                 .flatMap(Functions.identity())
                 .subscribe(result -> {
                     response.end(result.toString());
