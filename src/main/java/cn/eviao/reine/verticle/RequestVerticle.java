@@ -1,16 +1,14 @@
 package cn.eviao.reine.verticle;
 
 import cn.eviao.reine.bean.definition.Reine;
-import cn.eviao.reine.compiler.TemplateCompiler;
-import cn.eviao.reine.compiler.TemplateCompilerFactory;
+import cn.eviao.reine.bootstrap.Bootstrap;
 import cn.eviao.reine.constant.Address;
 import cn.eviao.reine.resolver.DefinitionResolver;
 import cn.eviao.reine.resolver.XMLDefinitionResolver;
-import cn.eviao.reine.utils.BootstrapUtils;
 import cn.eviao.reine.utils.TemplateUtils;
 import com.alibaba.fastjson.JSON;
 import io.reactivex.Single;
-import io.reactivex.internal.functions.Functions;
+import io.reactivex.functions.Function3;
 import io.vertx.core.Future;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.AbstractVerticle;
@@ -29,7 +27,6 @@ public class RequestVerticle extends AbstractVerticle {
 
     private final static String CONTENT_HTML_TYPE = "text/html; charset=utf-8";
 
-    private final TemplateCompiler compiler = TemplateCompilerFactory.factory();
     private final DefinitionResolver resolver = new XMLDefinitionResolver();
 
     @Override
@@ -64,27 +61,22 @@ public class RequestVerticle extends AbstractVerticle {
                 .map(it -> it.body()).map(it -> JSON.parseObject(it, Map.class));
     }
 
-    private Single<String> combineBootstrap(String layout) {
-        return BootstrapUtils.combineLayout(vertx, layout);
-    }
-
     private void handlePreview(RoutingContext routingContext) {
         HttpServerResponse response = routingContext.response();
         response.putHeader("content-type", CONTENT_HTML_TYPE);
 
         Map<String, String> params = transformParams(routingContext);
+        Function3<Bootstrap, String, Map, Bootstrap> mergeBootstrap = (b, l, d) -> b.merge(l, d);
 
         resolveDefinition(params.get("template"))
-                .flatMap(reine -> {
-                    Single<String> layout = Single.just(reine.getLayout());
-                    Single<Map> context = loadDataSource(reine, params);
-                    return Single.zip(layout, context, compiler::apply);
+                .flatMap(definition -> {
+                    Single<Bootstrap> bootstrap = Bootstrap.load(vertx);
+                    Single<String> layout = Single.just(definition.getLayout());
+                    Single<Map> data = loadDataSource(definition, params);
+                    return Single.zip(bootstrap, layout, data, mergeBootstrap);
                 })
-                .flatMap(Functions.identity())
-                .map(this::combineBootstrap)
-                .flatMap(Functions.identity())
                 .subscribe(result -> {
-                    response.end(result.toString());
+                    response.end(result.getSource());
                 }, err -> {
                     response.setStatusCode(500).end(err.getMessage());
                     err.printStackTrace();

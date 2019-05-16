@@ -22,12 +22,12 @@ public class PebbleCompiler implements TemplateCompiler {
     }
     
     private void initPebbleEngine() {
-        Syntax.Builder syntaxBuilder = new Syntax.Builder();
+        Syntax syntax = new Syntax.Builder().build();
 
         engine = new PebbleEngine.Builder()
             .loader(new StringLoader())
-            .defaultEscapingStrategy("js")
-            .syntax(syntaxBuilder.build())
+//            .defaultEscapingStrategy("js")
+            .syntax(syntax)
             .build();
     }
 

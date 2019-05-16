@@ -39,7 +39,7 @@ public class QueryExecutor implements DaoExecutor<Map<String, Map<String, Object
         return resultSet.getColumnNames().stream().map(column -> {
             Object value = resultSet.getRows(true).get(index).getValue(column);
             return new Pair<String, Object>(column, value);
-        }).collect(Collectors.toMap(Pair::getKey, Pair::getValue));
+        }).collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
     }
 
     private Single<Data> transformMultiple(ResultSet resultSet) {
@@ -83,7 +83,7 @@ public class QueryExecutor implements DaoExecutor<Map<String, Map<String, Object
             return Observable.fromIterable(dataSet.getCommands())
                     .filter(it -> it instanceof Query)
                     .flatMapSingle(it -> executeCommand(conn, params, it))
-                    .toMap(Pair::getKey, Pair::getValue);
+                    .toMap(Pair::getLeft, Pair::getRight);
         });
     }
 
@@ -92,7 +92,7 @@ public class QueryExecutor implements DaoExecutor<Map<String, Map<String, Object
             Single<String> name = Single.just(dataSet.getName());
             Single<Map<String, Object>> resultset = queryDataSet(dataSet, params);
             return Single.zip(name, resultset, Pair::new);
-        }).toMap(Pair::getKey, Pair::getValue);
+        }).toMap(Pair::getLeft, Pair::getRight);
     }
 
     @Override
