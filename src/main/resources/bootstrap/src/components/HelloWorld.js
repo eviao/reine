@@ -15,7 +15,7 @@ class HelloWorld extends Component {
     }`
 
   render() {
-    return html`Web Components are <span>${this.getValue()}</span>!`
+    return html`hello, <span>${this.getValue()}</span>!`
   }
 }
 
