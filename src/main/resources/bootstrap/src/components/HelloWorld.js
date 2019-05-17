@@ -1,6 +1,6 @@
-import { customElement, html, css } from 'lit-element';
-import { Component } from '@/component';
-import { connect } from '@/helper';
+import { customElement, html, css } from 'lit-element'
+import { Component } from '@/component'
+import { connect } from '@/helper'
 
 @customElement('hello-world')
 class HelloWorld extends Component {
@@ -12,10 +12,10 @@ class HelloWorld extends Component {
   static styles = css`
     span {
       color: red;
-    }`;
+    }`
 
   render() {
-    return html`Web Components are <span>${this.value}</span>!`
+    return html`Web Components are <span>${this.getValue()}</span>!`
   }
 }
 

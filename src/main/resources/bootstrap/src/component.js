@@ -14,7 +14,7 @@ export class Component extends LitElement {
   
   static get properties() {
     return {
-      value: { noAccessor: true }
+      value: { type: String }
     }
   }
   
@@ -22,17 +22,13 @@ export class Component extends LitElement {
     super()
   }
   
-  set value(val) {
-    const { store, _value } = this
-    const oldVal = _value
-    if (isExpression(val) && store) {
-      const path = resolveExpression(val)
-      this._value = store.get(path)
+  getValue() {
+    const { store, value } = this
+    if (isExpression(value) && store) {
+      const path = resolveExpression(value)
+      return store.get(path)
     } else {
-      this._value = val
+      return value
     }
-    this.requestUpdate('value', oldVal)
   }
-  
-  get value() { return this._value }
 }

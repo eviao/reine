@@ -9,7 +9,7 @@
 <body>
     <div id="_reine_root">#{> layout}</div>
     <script type="text/javascript">
-        new Bootstrap(#{> data})
+        window._reineData = (#{> data})
     </script>
 </body>
 </html>

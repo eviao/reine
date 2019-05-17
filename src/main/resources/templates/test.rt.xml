@@ -8,10 +8,7 @@
     </datasource>
     <layout>
         <![CDATA[
-            <div>
-                <hello-world right="{{t}}"></hello-world>
-                <div>123</div>
-            </div>
+            <hello-world value="{{template.test[0].name}}"></hello-world>
         ]]>
     </layout>
 </reine>

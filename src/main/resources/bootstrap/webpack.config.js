@@ -22,7 +22,7 @@ module.exports = {
       template: 'src/template.tpl',
       filename: 'bootstrap.tpl',
       xhtml: true,
-      inject: 'body',
+      inject: 'body', // head or body
     }),
     new HtmlWebpackInlineSourcePlugin(),
   ],
