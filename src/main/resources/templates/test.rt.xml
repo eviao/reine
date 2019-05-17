@@ -9,12 +9,8 @@
     <layout>
         <![CDATA[
             <div>
-                {% for t in template.test %}
-                    <div>
-                        <hello-world value={{t}} />
-                        {{t}}
-                    </div>
-                {% endfor %}
+                <hello-world right="{{t}}"></hello-world>
+                <div>123</div>
             </div>
         ]]>
     </layout>

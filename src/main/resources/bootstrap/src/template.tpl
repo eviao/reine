@@ -8,5 +8,8 @@
 </head>
 <body>
     <div id="_reine_root">#{> layout}</div>
+    <script type="text/javascript">
+        new Bootstrap(#{> data})
+    </script>
 </body>
 </html>

@@ -21,6 +21,8 @@
         <pebble.version>3.0.9</pebble.version>
         
         <main.verticle>cn.eviao.reine.MainVerticle</main.verticle>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencyManagement>

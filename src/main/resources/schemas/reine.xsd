@@ -5,8 +5,8 @@
 
     <xs:simpleType name="QueryMode">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="single"/>
-            <xs:enumeration value="multiple"/>
+            <xs:enumeration right="single"/>
+            <xs:enumeration right="multiple"/>
         </xs:restriction>
     </xs:simpleType>
 

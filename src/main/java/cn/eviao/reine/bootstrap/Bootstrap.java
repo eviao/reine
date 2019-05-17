@@ -19,23 +19,23 @@ public class Bootstrap {
         this.source = new StringBuffer(source);
     }
     
-    private Bootstrap mergeLayout(String layout) {
+    private void mergeLayout(String layout) {
         int start = source.indexOf(LAYOUT_PLACEHOLDER);
         int end = start + LAYOUT_PLACEHOLDER.length();
         source.replace(start, end, layout);
-        return this;
     }
 
-    private Bootstrap mergeData(Object data) {
+    private void mergeData(Object data) {
         String json = JSON.toJSONString(data);
         int start = source.indexOf(DATA_PLACEHOLDER);
         int end = start + DATA_PLACEHOLDER.length();
         source.replace(start, end, json);
-        return this;
     }
     
     public Bootstrap merge(String layout, Object data) {
-        return mergeLayout(layout).mergeData(data);
+        mergeLayout(layout);
+        mergeData(data);
+        return this;
     }
     
     public String getSource() {
