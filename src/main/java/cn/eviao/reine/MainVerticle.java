@@ -7,7 +7,6 @@ import cn.eviao.reine.verticle.RequestVerticle;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Future;
-import io.vertx.core.eventbus.EventBus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,10 +18,8 @@ public class MainVerticle extends AbstractVerticle {
 
     @Override
     public void start(Future<Void> startFuture) throws Exception {
-
-        EventBus eventBus = vertx.eventBus();
-
-        eventBus.registerDefaultCodec(Reine.class, new ReineMessageCodec());
+        vertx.exceptionHandler(err -> logger.error(err));
+        vertx.eventBus().registerDefaultCodec(Reine.class, new ReineMessageCodec());
 
         Function<String, Future<String>> deployRequestVerticle = it ->
                 Future.future(future -> vertx.deployVerticle(new RequestVerticle(), new DeploymentOptions(config()), future));

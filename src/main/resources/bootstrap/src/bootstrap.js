@@ -14,9 +14,9 @@ class Bootstrap {
   }
 
   initComponents() {
-    const componentsContext = require.context('./components', false, /[A-Z]\w+\.js$/)
-    componentsContext.keys().forEach(fileName => {
-      const config = componentsContext(fileName)
+    const context = require.context('./components', false, /[A-Z]\w+\.js$/)
+    context.keys().forEach(fileName => {
+      const config = context(fileName)
       const module = config.default || config
       if (_.isFunction(module)) {
         module(this.store)

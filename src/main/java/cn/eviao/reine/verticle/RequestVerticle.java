@@ -78,8 +78,8 @@ public class RequestVerticle extends AbstractVerticle {
                 .subscribe(result -> {
                     response.end(result.getSource());
                 }, err -> {
+                    logger.error(err);
                     response.setStatusCode(500).end(err.getMessage());
-                    err.printStackTrace();
                 });
     }
 

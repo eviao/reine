@@ -15,18 +15,13 @@ public class PebbleCompiler implements TemplateCompiler {
     
     public final static PebbleCompiler INSTANCE = new PebbleCompiler();
     
-    private PebbleEngine engine;
+    private final PebbleEngine engine;
 
     public PebbleCompiler() {
-        initPebbleEngine();
-    }
-    
-    private void initPebbleEngine() {
         Syntax syntax = new Syntax.Builder().build();
-
         engine = new PebbleEngine.Builder()
             .loader(new StringLoader())
-//            .defaultEscapingStrategy("js")
+            //defaultEscapingStrategy("js")
             .syntax(syntax)
             .build();
     }
