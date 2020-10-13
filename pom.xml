@@ -14,7 +14,7 @@
         <handlebars.version>4.1.2</handlebars.version>
         <mysql.version>8.0.15</mysql.version>
         <log4j.version>2.11.2</log4j.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <guava.version>27.1-jre</guava.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <fastjson.version>1.2.58</fastjson.version>
